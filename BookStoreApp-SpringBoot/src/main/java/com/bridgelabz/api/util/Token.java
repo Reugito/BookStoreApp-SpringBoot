@@ -49,8 +49,9 @@ public class Token {
 		//to decode
 		DecodedJWT decodedJwt = jwtVerifire.verify(token);
 		
-		Claim claim = decodedJwt.getClaim("user_id");
 		
+		Claim claim = decodedJwt.getClaim("user_id");
+			
 		user_id = claim.asLong();
 		
 		return user_id;

@@ -11,5 +11,4 @@ public class BookStoreAppSpringBootApplication {
 		SpringApplication.run(BookStoreAppSpringBootApplication.class, args);
 		
 	}
-
 }

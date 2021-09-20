@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.api.dto.UserDTO;
+import com.bridgelabz.api.dto.VerifyUser;
 import com.bridgelabz.api.exception.UserRegisteredException;
 import com.bridgelabz.api.model.User;
 import com.bridgelabz.api.repo.UserRepository;
@@ -21,6 +22,12 @@ public class UserService implements IUserService {
 	
 	@Autowired
 	Token myToken;
+	
+	@Autowired
+	MyEmailService emailService;
+	
+	@Autowired
+	OTPService otpService;
 	
 	@Override
 	public List<User> getUsers() {
@@ -59,7 +66,27 @@ public class UserService implements IUserService {
 			
 			String token = myToken.createToken(user.getUser_id());
 			
+			int otp = otpService.generateOTP(userDTO.email_id);
+			
+			emailService.sendOTPMessage(userDTO.email_id, "Registration OTP","Token = "+token
+																		+"Your OTP = "+otp);
 			return new Response(200, "User Successfully added", token);
+	}
+	
+
+	@Override
+	public Response verifyUser(VerifyUser uservar) {
+		Optional<User> isPresent = userRepo.findByEmailid(uservar.getEmail_id());
+		if(isPresent.isPresent()) {
+			
+			User user = isPresent.get();
+			if(otpService.getOTP(uservar.getEmail_id()) == uservar.getOtp()) {
+				user.setVerify(true);
+				userRepo.save(user);
+				return new Response(200, "User Successfully verified", isPresent);
+			}
+		}
+		return new Response(200, "Wrong OTP", null);
 	}
 
 	@Override
@@ -76,7 +103,7 @@ public class UserService implements IUserService {
 		userRepo.save(user);
 		return new Response(200, "user updated succsessfull", user);
 	}
-
+	
 	@Override
 	public void deleteUser(Long userId) {
 		User user = this.getUserById(userId);

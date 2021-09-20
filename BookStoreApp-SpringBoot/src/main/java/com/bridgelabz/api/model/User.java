@@ -39,8 +39,6 @@ public @Data class User {
 	
 	private Boolean verify;
 	
-	private String otp;
-	
 	private LocalDate purchase_date;
 	
 	private LocalDate expiry_date;
@@ -59,11 +57,9 @@ public @Data class User {
 		this.password = user.password;
 		this.email_id = user.email_id;
 		this.verify = user.verify;
-		this.otp = user.otp;
 		this.purchase_date = user.purchase_date;
 		this.expiry_date = user.expiry_date;
 	}
-
 	
 
 	public void updateUser(UserDTO user) {

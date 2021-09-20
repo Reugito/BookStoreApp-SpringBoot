@@ -18,7 +18,7 @@ public @Data class UserDTO {
 	@JsonFormat(pattern="dd-MM-yyyy")
 	public LocalDate birth_date;
 	
-	public LocalDateTime registration_date = LocalDateTime.now();;
+	public LocalDateTime registration_date = LocalDateTime.now();
 	
 	public LocalDateTime update_date;
 	
@@ -28,7 +28,7 @@ public @Data class UserDTO {
 	
 	public Boolean verify;
 	
-	public String otp;
+	public int otp;
 	
 	public LocalDate purchase_date;
 	

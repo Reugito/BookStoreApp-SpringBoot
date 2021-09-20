@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.bridgelabz.api.dto.UserDTO;
+import com.bridgelabz.api.dto.VerifyUser;
 import com.bridgelabz.api.model.User;
 import com.bridgelabz.api.util.Response;
 
@@ -21,8 +22,9 @@ public interface IUserService {
 	
 	Response addUser(UserDTO userDTO);
 	
-	Response updateUser(String token, UserDTO userDTO);
+	Response verifyUser(VerifyUser User);
 	
+	Response updateUser(String token, UserDTO userDTO);
 	
 	void deleteUser(Long userId);
 }
