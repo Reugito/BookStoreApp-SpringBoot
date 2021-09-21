@@ -16,15 +16,19 @@ public interface IUserService {
 	
 	Optional<User> getUserByEmailId(String emailId);
 	
-	User getUserById(Long userId);
+	Optional<User> getUserById(Long userId);
 	
 	List<User>sortByName(String name);
 	
 	Response addUser(UserDTO userDTO);
 	
+	Response loginUser(String email, String password);
+	
+	Response forgotPassword(String token, String psw);
+	
 	Response verifyUser(VerifyUser User);
 	
 	Response updateUser(String token, UserDTO userDTO);
 	
-	void deleteUser(Long userId);
+	void deleteUser(String token);
 }

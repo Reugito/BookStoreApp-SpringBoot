@@ -34,10 +34,9 @@ public @Data class Cart {
 	public Cart() {
 	}
 
-	public Cart(CartServiceDTO cartDTO) {
-		//this.user.user_id =  cartDTO.user_id;
-//		this.book = cartDTO.book;
-//		this.quantity = cartDTO.quantity;
-	}
-		 
+	public Cart(User user, Book book, Long quantity) {
+		this.user = user;
+		this.book = book;
+		this.quantity = quantity;
+	}	 
 }

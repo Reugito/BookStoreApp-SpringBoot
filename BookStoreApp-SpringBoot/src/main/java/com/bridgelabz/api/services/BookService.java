@@ -1,12 +1,14 @@
 package com.bridgelabz.api.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.api.dto.BookDTO;
 import com.bridgelabz.api.model.Book;
+import com.bridgelabz.api.model.User;
 import com.bridgelabz.api.repo.BookRepository;
 import com.bridgelabz.api.util.Token;
 
@@ -15,6 +17,12 @@ public class BookService implements IBookService {
 	
 	@Autowired
 	BookRepository bookRepo;
+	
+	@Autowired
+	Token myToken;
+	
+	@Autowired
+	UserService userService;
 
 	@Override
 	public List<Book> getBooks() {
@@ -46,18 +54,25 @@ public class BookService implements IBookService {
 	}
 
 	@Override
-	public void changeBookQuantity(Long book_id, Long quantity) {
-		Book book = this.getBookById(book_id);
-		book.setQuantity(quantity);
-		bookRepo.save(book);
+	public void changeBookQuantity(String token, Long book_id, Long quantity) {
+		Long id = myToken.decodeToken(token);
+		Optional<User> user = userService.getUserById(id);
+		if(user.isPresent()) {
+			Book book = this.getBookById(book_id);
+			book.setQuantity(quantity);
+			bookRepo.save(book);
+		}
 	}
 
 	@Override
-	public void changeBookPrice(Long book_id, Float price) {
-		Book book = this.getBookById(book_id);
-		book.setPrice(price);
-		bookRepo.save(book);
-		
+	public void changeBookPrice(String token, Long book_id, Float price) {
+		Long id = myToken.decodeToken(token);
+		Optional<User> user = userService.getUserById(id);
+		if(user.isPresent()) {
+			Book book = this.getBookById(book_id);
+			book.setPrice(price);
+			bookRepo.save(book);
+		}
 	}
 
 }

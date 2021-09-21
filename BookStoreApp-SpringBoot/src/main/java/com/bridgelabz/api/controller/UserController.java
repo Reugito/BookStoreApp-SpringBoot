@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bridgelabz.api.dto.ResponseDTO;
@@ -54,13 +55,24 @@ public class UserController {
 		 return new ResponseEntity<ResponseDTO>( new
 		 ResponseDTO("Get Call By Id Success",
 		 userService.getUserByEmailId(emailId)), HttpStatus.OK);
-		 
 	}
 	
 	@PostMapping("/adduser")
 	ResponseEntity<Response> addUser(@RequestBody UserDTO userDTO){
 		Response response = userService.addUser(userDTO);
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<Response> userLogin(@RequestParam(name = "email") String email_id, @RequestParam String psw) {
+		Response resp = userService.loginUser(email_id, psw);
+		return new ResponseEntity<Response>(resp, HttpStatus.OK);
+	}
+	
+	@PostMapping("/forgotpsw")
+	public ResponseEntity<Response> forgotPassword(@RequestParam(name = "token") String token, @RequestParam String psw) {
+		Response resp = userService.forgotPassword(token, psw);
+		return new ResponseEntity<Response>(resp, HttpStatus.OK);
 	}
 	
 	@PostMapping("/verifyuser")
@@ -82,10 +94,10 @@ public class UserController {
 		return new ResponseEntity<Response>(resp, HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/delete/{userId}")
-	public ResponseEntity<ResponseDTO> deleteUser(@PathVariable("userId") Long userId) {
-		userService.deleteUser(userId);
-		return new ResponseEntity<ResponseDTO>(new ResponseDTO("deleted adressBook data with personId :", userId),
+	@DeleteMapping("/delete/{token}")
+	public ResponseEntity<ResponseDTO> deleteUser(@PathVariable("token") String token) {
+		userService.deleteUser(token);
+		return new ResponseEntity<ResponseDTO>(new ResponseDTO("deleted adressBook data with personId :", token),
 				HttpStatus.OK);
 	}
 }

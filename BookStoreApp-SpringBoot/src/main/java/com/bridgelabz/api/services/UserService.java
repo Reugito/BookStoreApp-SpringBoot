@@ -41,8 +41,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public User getUserById(Long userId) {
-		return userRepo.findById(userId).orElse(null);
+	public Optional<User> getUserById(Long userId) {
+		return userRepo.findById(userId);
 	}
 	
 	@Override
@@ -73,6 +73,20 @@ public class UserService implements IUserService {
 			return new Response(200, "User Successfully added", token);
 	}
 	
+	@Override
+	public Response loginUser(String email, String password) {
+		Optional<User> isPresent = userRepo.findByEmailid(email);
+		if(isPresent.isPresent()) {
+			if(isPresent.get().getPassword().equals(password)) {
+				
+				String token = myToken.createToken(isPresent.get().getUser_id());
+				return new Response(200, "User Login Successfully ", token);
+				
+			}
+		} 
+		return new Response(200, "User Login Failed", "try again");
+	}
+	
 
 	@Override
 	public Response verifyUser(VerifyUser uservar) {
@@ -95,7 +109,7 @@ public class UserService implements IUserService {
 		Optional<User> isUserPresent = userRepo.findById(id);
 		
 		if(!isUserPresent.isPresent()) {
-			throw new UserRegisteredException(400, "Contact is not saved!!");
+			throw new UserRegisteredException(400, "User is not present!!");
 		}
 		System.out.println("user to update  is"+ isUserPresent.get());
 		User user = isUserPresent.get();
@@ -105,8 +119,25 @@ public class UserService implements IUserService {
 	}
 	
 	@Override
-	public void deleteUser(Long userId) {
-		User user = this.getUserById(userId);
-		userRepo.delete(user);
+	public void deleteUser(String token) {
+		Long id = myToken.decodeToken(token);
+		Optional<User> user = this.getUserById(id);
+		if(user.isPresent()) {
+			userRepo.delete(user.get());
+		}
+	}
+
+	@Override
+	public Response forgotPassword(String token, String psw) {
+		Long id = myToken.decodeToken(token);
+		Optional<User> isUserPresent = userRepo.findById(id);
+		
+		if(!isUserPresent.isPresent()) {
+			throw new UserRegisteredException(400, "User is not present!!");
+		}
+		User user = isUserPresent.get();
+		user.setPassword(psw);
+		userRepo.save(user);
+		return new Response(200, "pasword updated succsessfully", user);
 	}
 }

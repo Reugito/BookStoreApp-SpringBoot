@@ -59,16 +59,16 @@ public class BookController {
 				HttpStatus.OK);
 	}
 	
-	@PostMapping("/changeprice")
-	public ResponseEntity<ResponseDTO> changePrice(@RequestParam(name = "book_id") Long book_id, @RequestParam Float price) {
-		bookService.changeBookPrice(book_id, price);
+	@PostMapping("/changeprice/{token}")
+	public ResponseEntity<ResponseDTO> changePrice(@PathVariable("token") String token, @RequestParam(name = "book_id") Long book_id, @RequestParam Float price) {
+		bookService.changeBookPrice(token, book_id, price);
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("deleted adressBook data with personId :", bookService.getBookById(book_id)),
 				HttpStatus.OK);
 	}
 	
-	@PostMapping("/changequantity")
-	public ResponseEntity<ResponseDTO> changeQuantity(@RequestParam(name = "book_id") Long book_id, @RequestParam Long quantity) {
-		bookService.changeBookQuantity(book_id, quantity);
+	@PostMapping("/changequantity/{token}")
+	public ResponseEntity<ResponseDTO> changeQuantity(@PathVariable("token") String token, @RequestParam(name = "book_id") Long book_id, @RequestParam Long quantity) {
+		bookService.changeBookQuantity(token, book_id, quantity);
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("deleted adressBook data with personId :", bookService.getBookById(book_id)),
 				HttpStatus.OK);
 	}

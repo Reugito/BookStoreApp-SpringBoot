@@ -16,9 +16,9 @@ public interface IBookService {
 	
 	Book updateBook(Long book_id, BookDTO bookDTO);
 	
-	void changeBookQuantity(Long book_id, Long quantity);
+	void changeBookQuantity(String token, Long book_id, Long quantity);
 	
-	void changeBookPrice(Long book_id, Float price);
+	void changeBookPrice(String token, Long book_id, Float price);
 	
 	void deleteBook(Long book_id);
 

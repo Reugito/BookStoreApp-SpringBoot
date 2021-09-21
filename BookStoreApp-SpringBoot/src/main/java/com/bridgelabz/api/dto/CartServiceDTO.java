@@ -1,8 +1,5 @@
 package com.bridgelabz.api.dto;
 
-import com.bridgelabz.api.model.Book;
-import com.bridgelabz.api.model.User;
-
 import lombok.Data;
 
 @Data

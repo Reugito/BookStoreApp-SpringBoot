@@ -9,14 +9,14 @@ public interface IOrderService {
 	
 	Order getBookById(Long order_id);
 	
-	Order placeOrder(OrderDTO orderDTO);
+	Order placeOrder(String token, OrderDTO orderDTO);
 	
 	Order updateOrder(Long order_id, OrderDTO orderDTO);
 	
 	List<Order> getAllOrders();
 	
-	List<Order> getAllOrderForUser(Long user_id);
+	List<Order> getAllOrderForUser(String token);
 	
-	void cancelOrder(Long user_id);
+	String cancelOrder(Long order_id);
 
 }
