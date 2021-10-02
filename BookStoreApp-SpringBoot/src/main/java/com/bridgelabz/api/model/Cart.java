@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.bridgelabz.api.dto.CartServiceDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Data;
 
@@ -21,10 +22,12 @@ public @Data class Cart {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cart_id;
 	
+	@JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "user_id")
 	    private User user;
 	 
+	 @JsonIgnoreProperties(value = {"applications", "hibernateLazyInitializer"})
 	 @ManyToOne(fetch = FetchType.LAZY)
 	    @JoinColumn(name = "book_id")
 	    private Book book;

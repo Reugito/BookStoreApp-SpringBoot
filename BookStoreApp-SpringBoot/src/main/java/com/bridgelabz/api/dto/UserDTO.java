@@ -15,8 +15,8 @@ public @Data class UserDTO {
 	
 	public String kyc;
 	
-	@JsonFormat(pattern="dd-MM-yyyy")
-	public LocalDate birth_date;
+	
+	public LocalDateTime birth_date;
 	
 	public LocalDateTime registration_date = LocalDateTime.now();
 	

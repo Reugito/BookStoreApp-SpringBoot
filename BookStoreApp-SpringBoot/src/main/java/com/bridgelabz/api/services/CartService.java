@@ -1,7 +1,10 @@
 package com.bridgelabz.api.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +15,7 @@ import com.bridgelabz.api.model.Cart;
 import com.bridgelabz.api.model.User;
 import com.bridgelabz.api.repo.CartRepository;
 import com.bridgelabz.api.util.Token;
+import com.sun.mail.util.logging.CollectorFormatter;
 
 @Service
 public class CartService implements ICartService {
@@ -30,14 +34,20 @@ public class CartService implements ICartService {
 
 	@Override
 	public Cart addCart(CartServiceDTO carServiceDTO) {
-		Optional<User> user = userService.getUserById(carServiceDTO.user_id);
-		Book book = bookService.getBookById(carServiceDTO.book_id);
-		Cart cart = new Cart(user.get(), book, carServiceDTO.quantity);
-		return cartRepo.save(cart);
+		Long user_id = myToken.decodeToken(carServiceDTO.user_id);
+		Optional<User> user = userService.getUserById(user_id);
+		if(user.isPresent()) {
+			Book book = bookService.getBookById(carServiceDTO.book_id);
+			Cart cart = new Cart(user.get(), book, carServiceDTO.quantity);
+			return cartRepo.save(cart);
+			
+		}
+		return null;
 	}
 
 	@Override
 	public void removeFromCart(Long cart_id) {
+		System.out.println("deleted");
 		cartRepo.deleteById(cart_id);
 	}
 
@@ -55,12 +65,21 @@ public class CartService implements ICartService {
 	@Override
 	public List<Cart> findAllCarts(String token) {
 		Long user_id = myToken.decodeToken(token);
-		System.out.println("user_i = "+user_id);
 		Optional<User> user = userService.getUserById(user_id);
 		if(user.isPresent()) {
-			System.out.println(cartRepo.findAllCartsByUserId(user_id));
-			return cartRepo.findAllCartsByUserId(user_id);
+			List<Cart> carts = cartRepo.findAllCartsByUserId(user_id);
+			return carts;
 		}
 		return null;
+	}
+
+	@Override
+	public void removeAllCarts(String token) {
+		Long user_id = myToken.decodeToken(token);
+		Optional<User> user = userService.getUserById(user_id);
+		if(user.isPresent()) {
+			List<Cart> carts = cartRepo.findAllCartsByUserId(user_id);
+			cartRepo.deleteAll(carts);
+		}	
 	}
 }

@@ -1,8 +1,11 @@
 package com.bridgelabz.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,26 +19,45 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.api.dto.BookDTO;
 import com.bridgelabz.api.dto.ResponseDTO;
 import com.bridgelabz.api.dto.UserDTO;
+import com.bridgelabz.api.model.Book;
 import com.bridgelabz.api.services.IBookService;
 import com.bridgelabz.api.util.Response;
 
 @RestController
 @RequestMapping("/book")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BookController {
 	
 	@Autowired
 	IBookService bookService;
 	
 	@GetMapping(value = {"","/"})
-	ResponseEntity<ResponseDTO> getBooks(){
-		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Get call success",
-							bookService.getBooks()), HttpStatus.OK);
+	List<Book> getBooks(){
+//		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Get call success",
+//							bookService.getBooks()), HttpStatus.OK);
+		return bookService.getBooks();
 	}
 	
 	@GetMapping(value = "/{bookId}")
 	public ResponseEntity<ResponseDTO> getBookById(@PathVariable("bookId") Long Book_id) {
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Get call success",
 				bookService.getBookById(Book_id)), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "bookname/{name}")
+	public List<Book> getBookByName(@PathVariable("name") String name) {
+		return bookService.getBookByName(name);
+	}
+	
+	@GetMapping(value = "sort/{name}")
+	public List<Book> sortHighToLow(@PathVariable("name") int name) {
+		if(name == 1) {
+			return bookService.sortByPriceHighToLOw("price");
+		}else if (name == 2) {
+			return bookService.sortByPriceLowToHigh("price");
+		}else {
+			return bookService.sortById();
+		}
 	}
 	
 	@PostMapping("/add")

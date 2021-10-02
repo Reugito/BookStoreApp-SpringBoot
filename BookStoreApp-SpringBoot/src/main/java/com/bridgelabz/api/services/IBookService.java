@@ -10,7 +10,17 @@ public interface IBookService {
 	
 	List<Book> getBooks();
 	
+	List<Book> sortByPriceHighToLOw(String name);
+	
+	List<Book> sortByPriceLowToHigh(String name);
+	
+	List<Book> sortById();
+	
 	Book getBookById(Long book_id);
+	
+	List<Book> getBookByName(String name);
+	
+	Long getBookPriceById(Long book_id);
 	
 	Book addBook(BookDTO bookDTO);
 	

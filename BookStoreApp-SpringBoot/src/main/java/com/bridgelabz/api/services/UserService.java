@@ -129,8 +129,8 @@ public class UserService implements IUserService {
 
 	@Override
 	public Response forgotPassword(String token, String psw) {
-		Long id = myToken.decodeToken(token);
-		Optional<User> isUserPresent = userRepo.findById(id);
+
+		Optional<User> isUserPresent = userRepo.findByEmailid(token);
 		
 		if(!isUserPresent.isPresent()) {
 			throw new UserRegisteredException(400, "User is not present!!");

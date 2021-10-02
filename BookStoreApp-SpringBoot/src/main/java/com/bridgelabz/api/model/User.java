@@ -27,7 +27,7 @@ public @Data class User {
 	
 	private String kyc;
 	
-	private LocalDate birth_date;
+	private LocalDateTime birth_date;
 	
 	private LocalDateTime registration_date;
 	

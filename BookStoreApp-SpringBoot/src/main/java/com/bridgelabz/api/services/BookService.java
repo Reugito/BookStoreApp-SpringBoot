@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.api.dto.BookDTO;
@@ -33,6 +34,21 @@ public class BookService implements IBookService {
 	public Book getBookById(Long book_id) {
 		return bookRepo.findById(book_id).orElse(null);
 	}
+	
+	@Override
+	public List<Book> getBookByName(String name) {
+		List<Book> books;
+		try {
+		books = this.getBooks().stream().filter(i -> i.getName().contains(name) 
+									|| i.getAuthor().contains(name) 
+									|| i.getPrice().equals(Float.parseFloat(name)) ).toList();
+		
+		}catch (Exception e) {
+			books = this.getBooks().stream().filter(i -> i.getName().contains(name) 
+					|| i.getAuthor().contains(name)).toList();
+		}
+		return books;
+	}
 
 	@Override
 	public Book addBook(BookDTO bookDTO) {
@@ -59,7 +75,7 @@ public class BookService implements IBookService {
 		Optional<User> user = userService.getUserById(id);
 		if(user.isPresent()) {
 			Book book = this.getBookById(book_id);
-			book.setQuantity(quantity);
+			book.setQuantity(book.getQuantity()+ quantity);
 			bookRepo.save(book);
 		}
 	}
@@ -75,4 +91,26 @@ public class BookService implements IBookService {
 		}
 	}
 
+	@Override
+	public Long getBookPriceById(Long book_id) {
+		return null;
+	}
+
+	@Override
+	public List<Book> sortByPriceHighToLOw(String name) {
+		;
+		// TODO Auto-generated method stub
+		return bookRepo.findAll(Sort.by(name).descending());
+	}
+
+	@Override
+	public List<Book> sortByPriceLowToHigh(String name) {
+		// TODO Auto-generated method stub
+		return bookRepo.findAll(Sort.by(name).ascending());
+	}
+
+	@Override
+	public List<Book> sortById() {
+		return bookRepo.sortByIDDesc();
+	}
 }

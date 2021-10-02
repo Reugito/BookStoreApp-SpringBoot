@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.bridgelabz.api.services.IOrderService;
 
 @RestController
 @RequestMapping("/order")
+@CrossOrigin(origins = "http://localhost:4200")
 public class OrderController {
 	
 	@Autowired
@@ -51,6 +53,7 @@ public class OrderController {
 	
 	@PostMapping("/add/{token}")
 	public ResponseEntity<ResponseDTO> placeOrder(@PathVariable("token") String token, @RequestBody OrderDTO orderDTO) {
+		System.out.println("dhgf----> "+orderDTO);
 		return new ResponseEntity<ResponseDTO>(new ResponseDTO("Get call success",
 				orderService.placeOrder(token, orderDTO)), HttpStatus.OK);
 	}
